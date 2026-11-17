@@ -1,0 +1,334 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../app/Enums/**/*';
+@source '../../../../resources/views/filament/**/*';
+
+/*
+ * Tema Joaninha — painel administrativo.
+ * Toques visuais leves: fundo com bolinhas de joaninha, cartões com elevação suave,
+ * transições curtas e entrada animada do conteúdo. Tudo respeita o modo escuro
+ * e a preferência de movimento reduzido do sistema.
+ */
+
+@keyframes joaninha-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes joaninha-float {
+    0%,
+    100% {
+        transform: translateY(0) rotate(-6deg);
+    }
+
+    50% {
+        transform: translateY(-6px) rotate(6deg);
+    }
+}
+
+/* ---------- Fundo geral ---------- */
+
+.fi-body {
+    background-image:
+        radial-gradient(60rem 30rem at 100% -10%, color-mix(in oklab, var(--primary-500) 9%, transparent), transparent 70%),
+        radial-gradient(40rem 24rem at -10% 110%, color-mix(in oklab, var(--warning-400) 8%, transparent), transparent 70%);
+    background-attachment: fixed;
+}
+
+/* ---------- Logo ---------- */
+
+.joaninha-logo-bug {
+    animation: joaninha-float 6s ease-in-out infinite;
+    transform-origin: 50% 60%;
+}
+
+/* ---------- Conteúdo da página ---------- */
+
+/*
+ * Só o cabeçalho anima. O conteúdo (onde ficam os gráficos) não usa transform/opacity animados: no Chrome
+ * com aceleração de hardware, um canvas desenhado dentro de uma camada em animação pode não aparecer
+ * até a próxima repintura (ex.: passar o mouse).
+ */
+.fi-page-header-main-ctn {
+    animation: joaninha-fade-up 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.fi-header-heading {
+    @apply tracking-tight;
+}
+
+/* ---------- Barra lateral ---------- */
+
+.fi-sidebar-item-btn {
+    @apply transition duration-200;
+
+    &:hover {
+        transform: translateX(2px);
+    }
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
+    @apply bg-primary-50 shadow-sm ring-1 ring-primary-100 dark:bg-primary-500/10 dark:ring-primary-400/20;
+}
+
+/* ---------- Cartões, seções e tabelas ---------- */
+
+.fi-section,
+.fi-ta-ctn,
+.fi-wi-chart {
+    @apply transition-shadow duration-300;
+
+    &:hover {
+        @apply shadow-md shadow-gray-950/5 dark:shadow-black/30;
+    }
+}
+
+.fi-wi-stats-overview-stat {
+    @apply relative overflow-hidden transition duration-300;
+
+    & .fi-wi-stats-overview-stat-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: auto -2rem -2rem auto;
+        width: 5rem;
+        height: 5rem;
+        border-radius: 9999px;
+        background:
+            radial-gradient(circle at 30% 35%, rgb(24 24 27 / 0.9) 0 7%, transparent 8%),
+            radial-gradient(circle at 62% 30%, rgb(24 24 27 / 0.9) 0 6%, transparent 7%),
+            radial-gradient(circle at 45% 62%, rgb(24 24 27 / 0.9) 0 7%, transparent 8%),
+            var(--primary-500);
+        opacity: 0.06;
+        transition:
+            opacity 0.3s,
+            transform 0.3s;
+        pointer-events: none;
+    }
+
+    &:hover {
+        transform: translateY(-3px);
+        @apply shadow-lg shadow-primary-500/10;
+
+        &::after {
+            opacity: 0.14;
+            transform: scale(1.12) rotate(12deg);
+        }
+    }
+}
+
+.fi-ta-row {
+    @apply transition-colors duration-150;
+}
+
+/* ---------- Cartões de turma: faixa colorida pela etapa ---------- */
+
+.joaninha-classroom-card {
+    @apply relative overflow-hidden transition duration-300;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 4px;
+    }
+
+    &.joaninha-stage-early_childhood::before {
+        background: linear-gradient(90deg, var(--warning-400), var(--primary-400));
+    }
+
+    &.joaninha-stage-elementary::before {
+        background: linear-gradient(90deg, var(--info-400), var(--success-400));
+    }
+
+    &:hover {
+        transform: translateY(-3px);
+        @apply shadow-lg shadow-gray-950/5 dark:shadow-black/30;
+    }
+
+    & .fi-ta-actions {
+        @apply mt-1 w-full justify-between border-t border-gray-100 pt-3 dark:border-white/5;
+    }
+}
+
+/* ---------- Diário: nota colorida conforme a faixa ---------- */
+
+.joaninha-score {
+    @apply text-center font-bold tabular-nums;
+}
+
+.joaninha-score-success {
+    @apply text-success-600 dark:text-success-400;
+}
+
+.joaninha-score-warning {
+    @apply text-warning-600 dark:text-warning-400;
+}
+
+.joaninha-score-danger {
+    @apply text-danger-600 dark:text-danger-400;
+}
+
+/* ---------- Botões e abas ---------- */
+
+.fi-btn:not(.fi-disabled):not([disabled]) {
+    @apply transition duration-150;
+
+    &:active {
+        transform: scale(0.97);
+    }
+}
+
+.fi-tabs-item {
+    @apply transition duration-200;
+}
+
+/* ---------- Tela de login ---------- */
+
+.fi-simple-layout {
+    background-color: var(--gray-50);
+    background-image:
+        radial-gradient(circle at 15% 20%, color-mix(in oklab, var(--primary-500) 18%, transparent), transparent 35%),
+        radial-gradient(circle at 85% 80%, color-mix(in oklab, var(--warning-400) 16%, transparent), transparent 35%),
+        radial-gradient(circle, color-mix(in oklab, var(--primary-500) 14%, transparent) 1.5px, transparent 1.5px);
+    background-size:
+        auto,
+        auto,
+        22px 22px;
+
+    &:where(.dark, .dark *) {
+        background-color: var(--gray-950);
+    }
+}
+
+.fi-simple-main {
+    @apply shadow-xl shadow-primary-500/10 ring-1 ring-gray-950/5 sm:rounded-3xl dark:ring-white/10;
+    animation: joaninha-fade-up 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.joaninha-login-footer {
+    @apply mt-6 text-center text-xs text-gray-500 dark:text-gray-400;
+}
+
+/* ---------- Skeletons de carregamento ---------- */
+
+@keyframes joaninha-shimmer {
+    from {
+        background-position: 150% 0;
+    }
+
+    to {
+        background-position: -50% 0;
+    }
+}
+
+@layer components {
+    .joaninha-skeleton {
+        border-radius: 0.5rem;
+    }
+}
+
+.joaninha-skeleton,
+.fi-wi-chart .fi-wi-chart-canvas-ctn:not([data-chart-ready])::before {
+    background-color: var(--gray-100);
+    background-image: linear-gradient(
+        100deg,
+        transparent 20%,
+        color-mix(in oklab, white 70%, transparent) 50%,
+        transparent 80%
+    );
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    animation: joaninha-shimmer 1.4s ease-in-out infinite;
+
+    &:where(.dark, .dark *) {
+        background-color: color-mix(in oklab, white 6%, transparent);
+        background-image: linear-gradient(
+            100deg,
+            transparent 20%,
+            color-mix(in oklab, white 8%, transparent) 50%,
+            transparent 80%
+        );
+    }
+}
+
+.joaninha-skeleton-line {
+    stroke: var(--gray-200);
+    animation: joaninha-pulse 1.4s ease-in-out infinite;
+
+    &:where(.dark, .dark *) {
+        stroke: color-mix(in oklab, white 12%, transparent);
+    }
+}
+
+@keyframes joaninha-pulse {
+    50% {
+        opacity: 0.45;
+    }
+}
+
+/*
+ * Gráficos com altura fixa: o Chart.js ocupa exatamente a área (maintainAspectRatio: false), então
+ * o desenho nunca passa do cartão e os cartões lado a lado ficam com a mesma altura, em qualquer tela.
+ * O skeleton do carregamento usa a mesma altura, evitando o "pulo" quando o gráfico aparece.
+ */
+.joaninha-chart-area,
+.fi-wi-chart .fi-wi-chart-canvas-ctn {
+    position: relative;
+    height: 16rem;
+    aspect-ratio: auto !important;
+
+    @media (min-width: 64rem) {
+        height: 18rem;
+    }
+}
+
+.joaninha-chart-area-tall,
+.fi-wi-chart .fi-wi-chart-canvas-ctn[data-chart-type='line'] {
+    @media (min-width: 64rem) {
+        height: 20rem;
+    }
+}
+
+.fi-wi-chart .fi-wi-chart-canvas-ctn canvas {
+    max-height: 100% !important;
+    position: relative;
+    z-index: 1;
+}
+
+/*
+ * Até o primeiro desenho (o plugin joaninhaChartReady marca o contêiner com data-chart-ready), mostra o
+ * brilho de carregamento. Ele fica ATRÁS do canvas, então nunca esconde um gráfico já desenhado.
+ */
+.fi-wi-chart .fi-wi-chart-canvas-ctn:not([data-chart-ready])::before {
+    border-radius: 0.5rem;
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ---------- Acessibilidade: movimento reduzido ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
